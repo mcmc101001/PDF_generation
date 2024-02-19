@@ -1,6 +1,6 @@
 from typing import override
 
-from .base_class import TypstObject
+from pdf_generation.typeset.base_class import TypstObject
 
 
 class LoremIpsum(TypstObject):
@@ -8,5 +8,5 @@ class LoremIpsum(TypstObject):
         pass
 
     @override
-    def _render_internal_block(self) -> str:
+    def render_internal_block(self) -> str:
         return f"#lorem(30)"

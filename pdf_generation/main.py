@@ -8,7 +8,10 @@ from pdf_generation.typeset.table import Table
 from pdf_generation.typeset.typst_formatter import TypstFormatter
 
 # PYTHONPATH=.
+from pathlib import PurePath
 
+import os
+dir_path = os.path.dirname(os.path.realpath(__file__))
 
 app = FastAPI()
 
@@ -21,15 +24,18 @@ def read_root():
 @app.get("/generate", tags=["typst"])
 def generate(file_name: str = "my_file"):
 
-    document = TypstFormatter()
-    document.addObject(Metadata(title=file_name))
+    document = TypstFormatter(objects=[])
+    document.add_object(Metadata(title=file_name))
+    
+    p = PurePath(dir_path) / "images" / "logo-512x512.png"
+    print(p)
 
     logo = Image(
-        imageURL="./images/logo-512x512.png", heightPercentage=80, align="left"
+        image_URL=str(p), height_percentage=80, align="left"
     )
 
-    document.addObject(Page(header=logo))
-    document.addLoremIpsum()
+    document.add_object(Page(header=logo))
+    document.add_lorem_ipsum()
 
     place_table_content: list[list[str | TypstObject]] = [
         ["*Name*", "*Type*", "*Distance*"],
@@ -40,17 +46,17 @@ def generate(file_name: str = "my_file"):
         ["Wendy's", "Fast Food", "1.2 miles"],
     ]
 
-    document.addObject(
+    document.add_object(
         Table(data=place_table_content, caption="Nearby Places to eat", align="right")
     )
 
-    document.addObject(
-        Image(imageURL="./images/logo-512x512.png", heightPercentage=20, align="right")
-    )
+    # document.add_object(
+    #     Image(imageURL="./images/logo-512x512.png", heightPercentage=20, align="right")
+    # )
 
-    pdf_bytes = document.generatePDF()
+    pdf_bytes = document.generate_pdf()
 
-    headers = {"Content-Disposition": f"inline; filename={file_name}.pdf"}
+    headers = {"Content-Disposition": f'inline; filename="{file_name}.pdf"'}
 
     response = Response(
         content=pdf_bytes, media_type="application/pdf", headers=headers

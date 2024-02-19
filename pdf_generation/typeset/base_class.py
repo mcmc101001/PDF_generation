@@ -10,11 +10,11 @@ from pydantic.dataclasses import dataclass
 class TypstObject(ABC):
 
     @abstractmethod
-    def _render_internal_block(self) -> str:
+    def render_internal_block(self) -> str:
         raise NotImplementedError
 
     def render_block(self) -> str:
-        return self._render_internal_block()
+        return self.render_internal_block()
 
 
 type AlignmentType = Literal[
@@ -32,6 +32,6 @@ class AlignableTypstObject(TypstObject):
         return dedent(
             f"""
             #align({self.alignment})[
-                {self._render_internal_block()}
+                {self.render_internal_block()}
             ]"""
         )

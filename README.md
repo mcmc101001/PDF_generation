@@ -5,16 +5,16 @@
 - [x] python dependencies: poetry
 - [x] use dataclasses
 - [x] Clean code: isort + black
-- [ ] .dockerignore might me missing some stuff
+- [X] .dockerignore might me missing some stuff
 - [ ] for env managment: environs
-- [ ] Check tempfiles (from the std)
+- [X] Check tempfiles (from the std)
 - [ ] check pathlib
 - [ ] How to escape typst code
-- [ ] Snake case methods
+- [X] Snake case methods
 - [ ] Makefile to start the project / build the docker image, etc.
-- [ ] Commit / push you code
+- [X] Commit / push your code
 - [ ] Try to have a very simple webapp + text editor
-- [ ] No relative imports
+- [X] No relative imports
 - [ ] Add tests (test your endpoint): pytest + fastapi documentation
 
 ## Sample JSON input

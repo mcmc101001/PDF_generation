@@ -22,7 +22,7 @@ type AlignmentType = Literal[
 ]
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, kw_only=True)
 class AlignableTypstObject(TypstObject):
     alignment: AlignmentType | None = Field(default=None, alias="align")
 

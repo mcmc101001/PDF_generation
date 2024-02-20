@@ -9,17 +9,12 @@ from pdf_generation.typeset.base_class import TypstObject
 # MUST BE FRONT OF DOCUMENT, POTENTIAL FIX TO THIS WOULD BE TO INHERIT FROM SOME SUBCLASS THTA WILL BE ORDERED
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, kw_only=True)
 class Page(TypstObject):
     header: str | TypstObject = Field(alias="header")
 
     @override
     def render_internal_block(self) -> str:
-        # implement multiline indentation fix
-        # multiLineCode = self.header.toTypstCode() if isinstance(self.header, TypstObject) else f"{self.header}"
-
-        # if multiLineCode.count("\n") > 0:
-        #     pass
 
         return dedent(
             f"""\

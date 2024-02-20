@@ -1,14 +1,14 @@
 from __future__ import annotations
 
-import os
-from tempfile import NamedTemporaryFile, _TemporaryFileWrapper
+from tempfile import NamedTemporaryFile
+from typing import IO
 
 import typst
 from pydantic import BaseModel
 
 from pdf_generation.typeset.base_class import TypstObject
+from pdf_generation.typeset.image import Image, ImageFactory
 from pdf_generation.typeset.lorem import LoremIpsum
-from pdf_generation.typeset.image import Image
 
 
 class GenerateDocumentRequest(BaseModel):
@@ -18,18 +18,15 @@ class GenerateDocumentRequest(BaseModel):
 
 
 class TypstFormatter:
-    def __init__(self, objects: list[TypstObject] = [], image_temp_files: list[_TemporaryFileWrapper[bytes]] = []):
+    def __init__(self, objects: list[TypstObject] = []):
         self.objects = objects
-        self.image_temp_files= image_temp_files
+        self.image_factory = ImageFactory()
 
     def add_object(self, obj: TypstObject):
         self.objects.append(obj)
-        if isinstance(obj, Image):
-            self.image_temp_files.append(obj.temp_file)
-            
+
     def remove_temp_image_files(self):
-        for file in self.image_temp_files:
-            file.close() # Delete on close is True, so this will delete the temp file
+        self.image_factory.remove_temp_image_files()
 
     def render_block(self) -> str:
         return "\n".join([obj.render_block() for obj in self.objects])

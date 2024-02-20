@@ -1,16 +1,16 @@
+import os
+# PYTHONPATH=.
+from pathlib import PurePath
+
 from fastapi import FastAPI, Response
 
 from pdf_generation.typeset.base_class import TypstObject
-from pdf_generation.typeset.image import Image
+from pdf_generation.typeset.image import ImageFactory
 from pdf_generation.typeset.metadata import Metadata
 from pdf_generation.typeset.page import Page
 from pdf_generation.typeset.table import Table
 from pdf_generation.typeset.typst_formatter import TypstFormatter
 
-# PYTHONPATH=.
-from pathlib import PurePath
-
-import os
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
 app = FastAPI()
@@ -26,12 +26,12 @@ def generate(file_name: str = "my_file"):
 
     document = TypstFormatter(objects=[])
     document.add_object(Metadata(title=file_name))
-    
+
     p = PurePath(dir_path) / "images" / "logo-512x512.png"
     print(p)
 
-    logo = Image(
-        image_URL=str(p), height_percentage=80, align="left"
+    logo = document.image_factory.generate(
+        image_url=str(p), height_percentage=80, align="left"
     )
 
     document.add_object(Page(header=logo))

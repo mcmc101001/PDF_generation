@@ -8,7 +8,7 @@
 - [X] .dockerignore might me missing some stuff
 - [ ] for env managment: environs
 - [X] Check tempfiles (from the std)
-- [ ] check pathlib
+- [X] check pathlib
 - [ ] How to escape typst code
 - [X] Snake case methods
 - [ ] Makefile to start the project / build the docker image, etc.

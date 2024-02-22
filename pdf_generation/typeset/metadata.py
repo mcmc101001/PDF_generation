@@ -15,4 +15,4 @@ class Metadata(TypstObject):
 
     @override
     def render_internal_block(self) -> str:
-        return f'#set document(title: "{escape_typst_code(self.metadata_title)}")'
+        return f"#set document(title: [{escape_typst_code(self.metadata_title)}])"

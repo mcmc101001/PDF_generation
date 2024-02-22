@@ -2,6 +2,7 @@ import os
 from pathlib import PurePath
 
 from fastapi import FastAPI, Response
+from urllib.parse import quote
 
 from pdf_generation.typeset.base_class import TypstObject
 from pdf_generation.typeset.image import ImageFactory
@@ -54,7 +55,9 @@ def generate(file_name: str = "my_file"):
 
     pdf_bytes = document.generate_pdf()
 
-    headers = {"Content-Disposition": f'inline; filename="{file_name}.pdf"'}
+    safe_file_name = quote(file_name)
+
+    headers = {"Content-Disposition": f'inline; filename="{safe_file_name}.pdf"'}
 
     response = Response(
         content=pdf_bytes, media_type="application/pdf", headers=headers

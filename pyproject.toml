@@ -19,6 +19,7 @@ gunicorn = "^21.2.0"
 [tool.poetry.group.test.dependencies]
 httpx = "^0.26.0"
 pytest = "^8.0.1"
+pikepdf = "^8.13.0"
 
 [build-system]
 requires = ["poetry-core"]

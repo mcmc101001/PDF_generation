@@ -115,3 +115,5 @@ ARG APP_VERSION
 ENV APP_VERSION=${APP_VERSION}
 
 CMD ["poetry", "run", "gunicorn", "pdf_generation.main:app", "--workers=2", "--worker-class=uvicorn.workers.UvicornWorker", "--timeout=10000", "--bind=0.0.0.0:8000"]
+
+#Question: No need to run tests?

@@ -41,4 +41,5 @@ class TypstFormatter:
             file.write(self.render_block().encode("utf-8"))
             file.close()  # need to close file before calling typst.compile
             pdf_bytes = typst.compile(file.name)
+        self.remove_temp_image_files()
         return pdf_bytes

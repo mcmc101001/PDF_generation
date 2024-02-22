@@ -9,8 +9,8 @@ from typing import IO
 from pydantic import Field
 from pydantic.dataclasses import dataclass
 
-from pdf_generation.typeset.base_class import (AlignableTypstObject,
-                                               AlignmentType)
+from pdf_generation.typeset.base_class import AlignableTypstObject, AlignmentType
+from pdf_generation.typeset.utils import escape_typst_code
 
 """
 https://stackoverflow.com/questions/77682563/image-from-hyperlink-in-typst
@@ -43,7 +43,6 @@ class ImageFactory:
             width_percentage=width_percentage,
             height_percentage=height_percentage,
             caption=caption,
-            file=file,
             align=align,
         )
 
@@ -55,17 +54,11 @@ class ImageFactory:
 @dataclass(frozen=True, kw_only=True)
 class Image(AlignableTypstObject):
     image_url: str = Field(alias="image_url")
-    temp_file: IO = Field(alias="file")
     width_percentage: float | None = Field(default=None, alias="width_percentage")
     height_percentage: float | None = Field(default=None, alias="height_percentage")
     caption: str | None = Field(default=None, alias="caption")
 
-    def __del__(self):
-        self.temp_file.close()
-
     def render_internal_block(self) -> str:
-        if self.temp_file is None or self.image_url is None:
-            raise ValueError("Image temp_file is not generated!")
         if self.caption is None:
             return dedent(
                 f"""\
@@ -76,6 +69,6 @@ class Image(AlignableTypstObject):
                 f"""\
                 #figure(
                     image("{self.image_url}"{f", width: {self.width_percentage}%" if self.width_percentage else ""}{f", height: {self.height_percentage}%" if self.height_percentage else ""}),
-                    {f"caption: [{self.caption}]" if self.caption else ""}
+                    {f"caption: [{escape_typst_code(self.caption)}]" if self.caption else ""}
                 )"""
             )

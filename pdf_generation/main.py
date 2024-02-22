@@ -1,5 +1,4 @@
 import os
-# PYTHONPATH=.
 from pathlib import PurePath
 
 from fastapi import FastAPI, Response
@@ -18,7 +17,7 @@ app = FastAPI()
 
 @app.get("/")
 def read_root():
-    return {"Hello": "World"}
+    return {"message": "Hello World"}
 
 
 @app.get("/generate", tags=["typst"])
@@ -28,7 +27,6 @@ def generate(file_name: str = "my_file"):
     document.add_object(Metadata(title=file_name))
 
     p = PurePath(dir_path) / "images" / "logo-512x512.png"
-    print(p)
 
     logo = document.image_factory.generate(
         image_url=str(p), height_percentage=80, align="left"
@@ -38,12 +36,12 @@ def generate(file_name: str = "my_file"):
     document.add_lorem_ipsum()
 
     place_table_content: list[list[str | TypstObject]] = [
-        ["*Name*", "*Type*", "*Distance*"],
-        ["McDonalds", "Fast Food", "0.5 miles"],
-        ["Burger King", "Fast Food", "0.7 miles"],
-        ["Subway", "Fast Food", "0.8 miles"],
-        ["Taco Bell", "Fast Food", "1.0 miles"],
-        ["Wendy's", "Fast Food", "1.2 miles"],
+        ["*Name*", "_Type_", "#Distance"],
+        ["-McDonalds", "<Fast Food>", "x=1"],
+        ["@Burger King", "+Fast Food", "//0.7 miles,"],
+        ["$Subway", "$Fast Food$", "`0.8 miles`"],
+        ["~Taco Bell", "---Fast Food", "\\1.0 miles"],
+        ["/*Wendy's*/", 'Fast"Food', "1.2~miles"],
     ]
 
     document.add_object(

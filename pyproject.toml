@@ -13,7 +13,12 @@ mypy = "^1.8.0"
 typst = "^0.10.0"
 black = "^24.2.0"
 isort = "^5.13.2"
+gunicorn = "^21.2.0"
 
+
+[tool.poetry.group.test.dependencies]
+httpx = "^0.26.0"
+pytest = "^8.0.1"
 
 [build-system]
 requires = ["poetry-core"]

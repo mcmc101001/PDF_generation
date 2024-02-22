@@ -9,13 +9,13 @@
 - [ ] for env managment: environs
 - [X] Check tempfiles (from the std)
 - [X] check pathlib
-- [ ] How to escape typst code
+- [X] How to escape typst code
 - [X] Snake case methods
-- [ ] Makefile to start the project / build the docker image, etc.
+- [X] Makefile to start the project / build the docker image, etc.
 - [X] Commit / push your code
 - [ ] Try to have a very simple webapp + text editor
 - [X] No relative imports
-- [ ] Add tests (test your endpoint): pytest + fastapi documentation
+- [X] Add tests (test your endpoint): pytest + fastapi documentation
 
 ## Sample JSON input
 

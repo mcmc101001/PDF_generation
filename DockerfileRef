@@ -60,6 +60,12 @@ ENV PIP_DEFAULT_TIMEOUT=100 \
 # Copy the files needed for poetry to install dependencies (COPY only for local files, ADD can be used for remote)
 COPY --chown=${USER_UID}:${USER_GID} pyproject.toml poetry.lock ./
 
+# Docker image layer caches in order, so install dependencies first so 
+# that image remains cached if dep dont change and source code changes
+
+# Only prod dependencies (--only-main) to avoid installing dev dependencies
+# Avoid installing the project itself (--no-root) to separate dependencies from the project
+
 ############################
 # Image layer for prod-deps
 ############################
@@ -79,7 +85,9 @@ RUN poetry install --no-root
 #######################
 FROM python-base AS test
 
+# Wait for app to be ready before running tests
 ADD --chown=${USER_UID}:${USER_GID} https://github.com/ufoscout/docker-compose-wait/releases/download/2.11.0/wait /wait
+# QUESTION: No need to run ./wait after chmod into executable?
 RUN chmod +x /wait
 
 COPY --chown=${USER_UID}:${USER_GID} --from=test-deps /home/${USER_USERNAME}/venvs /home/${USER_USERNAME}/venvs
@@ -98,6 +106,7 @@ ENV APP_VERSION=${APP_VERSION}
 ###########################
 FROM python-base AS prod
 
+# Copy dependencies from prod-deps layer to prod layer
 COPY --chown=${USER_UID}:${USER_GID} --from=prod-deps /home/${USER_USERNAME}/venvs /home/${USER_USERNAME}/venvs
 
 # prod files only here

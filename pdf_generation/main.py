@@ -1,8 +1,9 @@
 import os
 from pathlib import PurePath
+from urllib.parse import quote
+import uvicorn
 
 from fastapi import FastAPI, Response
-from urllib.parse import quote
 
 from pdf_generation.typeset.base_class import TypstObject
 from pdf_generation.typeset.image import ImageFactory

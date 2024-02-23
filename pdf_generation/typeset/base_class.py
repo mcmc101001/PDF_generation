@@ -17,7 +17,7 @@ class TypstObject(ABC):
         return self.render_internal_block()
 
 
-type AlignmentType = Literal[
+type AlignmentType = Literal[  # type: ignore
     "start", "end", "left", "center", "right", "top", "horizon", "bottom"
 ]
 

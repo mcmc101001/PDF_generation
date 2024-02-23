@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 from shutil import copy2
-from tempfile import NamedTemporaryFile, _TemporaryFileWrapper, gettempdir
+from tempfile import NamedTemporaryFile, gettempdir
 from textwrap import dedent
 from typing import IO
 
@@ -19,7 +19,9 @@ typst images do not support internet or absolute paths.
 
 
 class ImageFactory:
-    def __init__(self, temp_files: list[IO] = []):
+    def __init__(self, temp_files: list[IO] | None = None):
+        if temp_files is None:
+            temp_files = []
         self.temp_files = temp_files
 
     def generate(

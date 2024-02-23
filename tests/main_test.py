@@ -1,10 +1,9 @@
-from fastapi.testclient import TestClient
-
-from pdf_generation.main import app
-
 from io import BytesIO
 
 import pikepdf
+from fastapi.testclient import TestClient
+
+from pdf_generation.main import app
 
 client = TestClient(app)
 
@@ -37,7 +36,6 @@ class TestGeneratePDF:
         assert response.status_code == 200
         assert response.headers.get("Content-Type") == "application/pdf"
         with pikepdf.open(BytesIO(response.content)) as pdf:
-            print(pdf.docinfo)
             assert str(pdf.docinfo["/Title"]) == "!@$%^*()_+-={}[]:\";'<>,./|\\~#&?"
 
     # FAILED

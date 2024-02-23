@@ -91,11 +91,12 @@ RUN chmod +x /wait
 
 COPY --chown=${USER_UID}:${USER_GID} --from=test-deps /home/${USER_USERNAME}/venvs /home/${USER_USERNAME}/venvs
 
-# Test files
-COPY --chown=${USER_UID}:${USER_GID} setup.cfg setup.cfg
-
 # prod files
-COPY --chown=${USER_UID}:${USER_GID} pdf_api pdf_api
+COPY --chown=${USER_UID}:${USER_GID} pdf_generation pdf_generation
+
+# test files
+COPY --chown=${USER_UID}:${USER_GID} tests tests
+COPY --chown=${USER_UID}:${USER_GID} setup.cfg setup.cfg
 
 ARG APP_VERSION
 ENV APP_VERSION=${APP_VERSION}

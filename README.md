@@ -17,11 +17,11 @@
 - [ ] Try to have a very simple webapp + text editor
 - [X] No relative imports
 - [X] Add tests (test your endpoint): pytest + fastapi documentation
-- [ ] Remove classes in tests
-- [ ] Run tests from Makefile with Docker
-- [ ] Run mypy / black --check / isort with 
-- [ ] Add flake8
-- [ ] Check docker volumes
+- [X] Remove classes in tests
+- [X] Run tests from Makefile with Docker
+- [X] Run mypy / black --check / isort with make
+- [X] Add flake8
+- [X] Check docker volumes
 - [ ] Move your models to pdf_generation.models.py
 - [ ] ImageFactory Refactor as a Context Manager
 - [ ] all paths should be pathlib.Path

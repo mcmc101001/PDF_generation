@@ -9,4 +9,4 @@ class LoremIpsum(TypstObject):
 
     @override
     def render_internal_block(self) -> str:
-        return f"#lorem(30)"
+        return "#lorem(30)"

@@ -1,12 +1,10 @@
 import os
 from pathlib import PurePath
 from urllib.parse import quote
-import uvicorn
 
 from fastapi import FastAPI, Response
 
 from pdf_generation.typeset.base_class import TypstObject
-from pdf_generation.typeset.image import ImageFactory
 from pdf_generation.typeset.metadata import Metadata
 from pdf_generation.typeset.page import Page
 from pdf_generation.typeset.table import Table
@@ -49,10 +47,6 @@ def generate(file_name: str = "my_file"):
     document.add_object(
         Table(data=place_table_content, caption="Nearby Places to eat", align="right")
     )
-
-    # document.add_object(
-    #     Image(imageURL="./images/logo-512x512.png", heightPercentage=20, align="right")
-    # )
 
     pdf_bytes = document.generate_pdf()
 

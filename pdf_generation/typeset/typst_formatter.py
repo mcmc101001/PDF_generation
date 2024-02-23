@@ -1,13 +1,12 @@
 from __future__ import annotations
 
 from tempfile import NamedTemporaryFile
-from typing import IO
 
 import typst
 from pydantic import BaseModel
 
 from pdf_generation.typeset.base_class import TypstObject
-from pdf_generation.typeset.image import Image, ImageFactory
+from pdf_generation.typeset.image import ImageFactory
 from pdf_generation.typeset.lorem import LoremIpsum
 
 

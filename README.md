@@ -22,12 +22,12 @@
 - [X] Run mypy / black --check / isort with make
 - [X] Add flake8
 - [X] Check docker volumes
-- [ ] Move your models to pdf_generation.models.py
+- [X] Move your models to pdf_generation.models.py
 - [ ] ImageFactory Refactor as a Context Manager
-- [ ] all paths should be pathlib.Path
-- [ ] Reorganize your files to put typst equivalent models in a single package
+- [X] all paths should be pathlib.Path
+- [X] Reorganize your files to put typst equivalent models in a single package
 - [ ] Create temporary directory for compiling the PDF
-- [ ] Make it a real API
+- [X] Make it a real API
 
 
 ## Sample JSON input

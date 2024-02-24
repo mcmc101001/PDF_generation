@@ -3,21 +3,15 @@ from __future__ import annotations
 from tempfile import NamedTemporaryFile
 
 import typst
-from pydantic import BaseModel
 
-from pdf_generation.typeset.base_class import TypstObject
-from pdf_generation.typeset.image import ImageFactory
-from pdf_generation.typeset.lorem import LoremIpsum
-
-
-class GenerateDocumentRequest(BaseModel):
-    latitude: float
-    longitude: float
-    file_name: str | None = "my_file"
+from pdf_generation.typeset.models.base_class import TypstObject
+from pdf_generation.typeset.models.image import ImageFactory
 
 
 class TypstFormatter:
-    def __init__(self, objects: list[TypstObject] = []):
+    def __init__(self, objects: list[TypstObject] | None = None):
+        if objects is None:
+            objects = []
         self.objects = objects
         self.image_factory = ImageFactory()
 
@@ -29,9 +23,6 @@ class TypstFormatter:
 
     def render_block(self) -> str:
         return "\n".join([obj.render_block() for obj in self.objects])
-
-    def add_lorem_ipsum(self):
-        self.add_object(LoremIpsum())
 
     def generate_pdf(self) -> bytes:
         with NamedTemporaryFile(

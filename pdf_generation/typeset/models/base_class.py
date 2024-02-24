@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from textwrap import dedent
-from typing import Literal
+from typing import Literal, override
 
 from pydantic import Field
 from pydantic.dataclasses import dataclass
@@ -24,14 +24,15 @@ type AlignmentType = Literal[  # type: ignore
 
 @dataclass(frozen=True, kw_only=True)
 class AlignableTypstObject(TypstObject):
-    alignment: AlignmentType | None = Field(default=None, alias="align")
+    align: AlignmentType | None = Field(default=None)
 
+    @override
     def render_block(self) -> str:
-        if self.alignment is None:
-            return self.render_block()
+        if self.align is None:
+            return self.render_internal_block()
         return dedent(
             f"""
-            #align({self.alignment})[
+            #align({self.align})[
                 {self.render_internal_block()}
             ]"""
         )

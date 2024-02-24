@@ -7,6 +7,11 @@ from pdf_generation.main import app
 
 client = TestClient(app)
 
+sample_json = {
+    "file_name": "test",
+    "content": [],
+}
+
 
 def test_read_main():
     response = client.get("/")
@@ -15,13 +20,19 @@ def test_read_main():
 
 
 def test_pdf_generated():
-    response = client.get("/generate")
+    response = client.post("/generate", json=sample_json)
     assert response.status_code == 200
     assert response.headers.get("Content-Type") == "application/pdf"
 
 
 def test_pdf_name_customisation():
-    response = client.get("/generate?file_name=custom_name")
+    response = client.post(
+        "/generate",
+        json={
+            "file_name": "custom_name",
+            "content": [],
+        },
+    )
     assert response.status_code == 200
     assert response.headers.get("Content-Type") == "application/pdf"
     assert (
@@ -31,8 +42,12 @@ def test_pdf_name_customisation():
 
 
 def test_pdf_name_escape_characters():
-    response = client.get(
-        '/generate?file_name=!@$%^*()_%2B-={}[]:";%27<>,./|\\~%23%26%3F'
+    response = client.post(
+        "/generate",
+        json={
+            "file_name": "!@$%^*()_+-={}[]:\";'<>,./|\\~#&?",
+            "content": [],
+        },
     )
     assert response.status_code == 200
     assert response.headers.get("Content-Type") == "application/pdf"
@@ -42,8 +57,12 @@ def test_pdf_name_escape_characters():
 
 # FAILED
 def test_pdf_exact_output():
-    response = client.get(
-        '/generate?file_name=!@$%^*()_%2B-={}[]:";%27<>,./|\\~%23%26%3F'
+    response = client.post(
+        "/generate",
+        json={
+            "file_name": "custom_name",
+            "content": [],
+        },
     )
     assert response.status_code == 200
     assert response.headers.get("Content-Type") == "application/pdf"

@@ -28,7 +28,7 @@ format:
 
 test:
 	docker run --rm --name ${APP_NAME_TEST} -v ${PWD}/pdf_generation:/home/${APP_NAME}/app/pdf_generation -p 8000:8000 ${DOCKER_USERNAME}/${APP_NAME_TEST}:${APP_VERSION} \
-		sh "poetry run pytest"
+		sh -c "poetry run pytest"
 
 lint: 
 	docker run --rm --name ${APP_NAME_TEST} -v ${PWD}/pdf_generation:/home/${APP_NAME}/app/pdf_generation -p 8000:8000 ${DOCKER_USERNAME}/${APP_NAME_TEST}:${APP_VERSION} \

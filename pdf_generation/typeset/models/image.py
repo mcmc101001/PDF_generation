@@ -9,7 +9,8 @@ from typing import IO
 from pydantic import Field
 from pydantic.dataclasses import dataclass
 
-from pdf_generation.typeset.base_class import AlignableTypstObject, AlignmentType
+from pdf_generation.typeset.models.base_class import (AlignableTypstObject,
+                                                      AlignmentType)
 from pdf_generation.typeset.utils import escape_typst_code
 
 """
@@ -26,7 +27,7 @@ class ImageFactory:
 
     def generate(
         self,
-        image_url: str,
+        image_url: Path,
         width_percentage: float | None = None,
         height_percentage: float | None = None,
         caption: str | None = None,
@@ -41,7 +42,7 @@ class ImageFactory:
         self.temp_files.append(file)
 
         return Image(
-            image_url=str(temp_file_relative_path),
+            image_url=temp_file_relative_path,
             width_percentage=width_percentage,
             height_percentage=height_percentage,
             caption=caption,
@@ -55,22 +56,23 @@ class ImageFactory:
 
 @dataclass(frozen=True, kw_only=True)
 class Image(AlignableTypstObject):
-    image_url: str = Field(alias="image_url")
-    width_percentage: float | None = Field(default=None, alias="width_percentage")
-    height_percentage: float | None = Field(default=None, alias="height_percentage")
-    caption: str | None = Field(default=None, alias="caption")
+    image_url: Path = Field()
+    width_percentage: float | None = Field(default=None)
+    height_percentage: float | None = Field(default=None)
+    caption: str | None = Field(default=None)
 
     def render_internal_block(self) -> str:
+        block = dedent(
+            f"""\
+                image("{self.image_url}"{f", width: {self.width_percentage}%" if self.width_percentage else ""}{f", height: {self.height_percentage}%" if self.height_percentage else ""})"""
+        )
         if self.caption is None:
-            return dedent(
-                f"""\
-                #image("{self.image_url}"{f", width: {self.width_percentage}%" if self.width_percentage else ""}{f", height: {self.height_percentage}%" if self.height_percentage else ""})"""
-            )
+            return f"#{block}"
         else:
             return dedent(
                 f"""\
                 #figure(
-                    image("{self.image_url}"{f", width: {self.width_percentage}%" if self.width_percentage else ""}{f", height: {self.height_percentage}%" if self.height_percentage else ""}),
+                    {block},
                     {f"caption: [{escape_typst_code(self.caption)}]" if self.caption else ""}
                 )"""
             )

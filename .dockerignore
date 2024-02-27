@@ -6,4 +6,4 @@
 .prettierignore
 .venv
 README.md
-run.py
+.idea

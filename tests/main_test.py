@@ -1,4 +1,5 @@
 from io import BytesIO
+from pathlib import Path
 
 import pikepdf
 from fastapi.testclient import TestClient
@@ -66,6 +67,7 @@ def test_pdf_exact_output():
     )
     assert response.status_code == 200
     assert response.headers.get("Content-Type") == "application/pdf"
-    with open("tests/pdfs/reference.pdf", "rb") as f:
+    ref_pdf_path = Path.cwd() / "pdfs" / "reference.pdf"
+    with open(ref_pdf_path, "rb") as f:
         expected_pdf = f.read()
     assert response.content == expected_pdf

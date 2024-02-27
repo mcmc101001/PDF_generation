@@ -10,7 +10,7 @@
 - [X] Check tempfile (from the std)
 - [X] check pathlib
 - [X] How to escape typst code
-- [ ] Check the performance (replace / regex)
+- [X] Check the performance (replace / regex)
 - [X] Snake case methods
 - [X] Makefile to start the project / build the docker image, etc.
 - [X] Commit / push your code

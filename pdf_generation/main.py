@@ -1,4 +1,3 @@
-import os
 from pathlib import Path
 from urllib.parse import quote
 
@@ -11,7 +10,7 @@ from pdf_generation.typeset.models.page import Page
 from pdf_generation.typeset.parser import parse_json_array
 from pdf_generation.typeset.typst_formatter import TypstFormatter
 
-dir_path = os.path.dirname(os.path.realpath(__file__))
+cwd = Path.cwd()
 
 app = FastAPI()
 
@@ -27,7 +26,7 @@ def generate(request: GeneratePdfRequest):
     document = TypstFormatter()
     document.add_object(Metadata(title=request.file_name))
 
-    p = Path(dir_path) / "images" / "logo-512x512.png"
+    p = Path(cwd) / "pdf_generation" / "images" / "logo-512x512.png"
 
     logo = document.image_factory.generate(
         image_url=p, height_percentage=80, align="left"

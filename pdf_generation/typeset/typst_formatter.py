@@ -1,8 +1,10 @@
 from __future__ import annotations
 
-from tempfile import NamedTemporaryFile
+from tempfile import NamedTemporaryFile, TemporaryDirectory
 
 import typst
+
+from pathlib import Path
 
 from pdf_generation.typeset.models.base_class import TypstObject
 from pdf_generation.typeset.models.image import ImageFactory
@@ -13,7 +15,8 @@ class TypstFormatter:
         if objects is None:
             objects = []
         self.objects = objects
-        self.image_factory = ImageFactory()
+        self.temp_dir = TemporaryDirectory()
+        self.image_factory = ImageFactory(Path(self.temp_dir.name))
 
     def add_object(self, obj: TypstObject):
         self.objects.append(obj)
@@ -26,10 +29,14 @@ class TypstFormatter:
 
     def generate_pdf(self) -> bytes:
         with NamedTemporaryFile(
-            suffix=".typ", delete=True, delete_on_close=False
+            suffix=".typ",
+            delete=True,
+            delete_on_close=False,
+            dir=Path(self.temp_dir.name),
         ) as file:
             file.write(self.render_block().encode("utf-8"))
             file.close()  # need to close file before calling typst.compile
             pdf_bytes = typst.compile(file.name)
         self.remove_temp_image_files()
+        self.temp_dir.cleanup()
         return pdf_bytes

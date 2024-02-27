@@ -26,7 +26,7 @@
 - [ ] ImageFactory Refactor as a Context Manager
 - [X] all paths should be pathlib.Path
 - [X] Reorganize your files to put typst equivalent models in a single package
-- [ ] Create temporary directory for compiling the PDF
+- [X] Create temporary directory for compiling the PDF
 - [X] Make it a real API
 
 

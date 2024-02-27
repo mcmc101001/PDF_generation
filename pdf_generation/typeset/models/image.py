@@ -2,15 +2,14 @@ from __future__ import annotations
 
 from pathlib import Path
 from shutil import copy2
-from tempfile import NamedTemporaryFile, gettempdir
+from tempfile import NamedTemporaryFile, TemporaryDirectory
 from textwrap import dedent
 from typing import IO
 
 from pydantic import Field
 from pydantic.dataclasses import dataclass
 
-from pdf_generation.typeset.models.base_class import (AlignableTypstObject,
-                                                      AlignmentType)
+from pdf_generation.typeset.models.base_class import AlignableTypstObject, AlignmentType
 from pdf_generation.typeset.utils import escape_typst_code
 
 """
@@ -20,10 +19,11 @@ typst images do not support internet or absolute paths.
 
 
 class ImageFactory:
-    def __init__(self, temp_files: list[IO] | None = None):
+    def __init__(self, temp_dir: Path, temp_files: list[IO] | None = None):
         if temp_files is None:
             temp_files = []
         self.temp_files = temp_files
+        self.temp_dir = temp_dir
 
     def generate(
         self,
@@ -33,11 +33,9 @@ class ImageFactory:
         caption: str | None = None,
         align: AlignmentType | None = None,
     ) -> Image:
-        file = NamedTemporaryFile(delete=True, delete_on_close=True)
+        file = NamedTemporaryFile(delete=True, delete_on_close=True, dir=self.temp_dir)
         copy2(image_url, file.name)
-
-        tempdir = gettempdir()
-        temp_file_relative_path = Path(file.name).relative_to(tempdir)
+        temp_file_relative_path = Path(file.name).relative_to(self.temp_dir)
 
         self.temp_files.append(file)
 

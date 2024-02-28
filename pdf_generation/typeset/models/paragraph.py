@@ -14,5 +14,5 @@ class Paragraph(TypstObject):
     def render_internal_block(self) -> str:
         rendered_content = ""
         for ele in self.content:
-            rendered_content += f"{ele.render_block()} "
-        return f"#par({rendered_content})"
+            rendered_content += f"{ele.render_block()}"
+        return f"#par()[{rendered_content}]"

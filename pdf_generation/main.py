@@ -9,6 +9,7 @@ from pdf_generation.typeset.models.metadata import Metadata
 from pdf_generation.typeset.models.page import Page
 from pdf_generation.typeset.parser import parse_json_array
 from pdf_generation.typeset.typst_formatter import TypstFormatter
+from pdf_generation.typeset.models.text import Text
 
 cwd = Path.cwd()
 
@@ -34,9 +35,9 @@ def generate(request: GeneratePdfRequest):
 
     document.add_object(Page(header=logo))
 
-    document.add_object(Heading(content="hello"))
-
     objects = parse_json_array(request.content)
+    if len(objects) == 0:
+        document.add_object(Heading(content=[Text(text="No content provided")]))
     for object in objects:
         document.add_object(object)
 

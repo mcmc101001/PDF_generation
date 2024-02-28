@@ -1,17 +1,22 @@
 from dataclasses import fields
 from typing import Type
 
-from pdf_generation.models.request_model import (RequestContentType,
-                                                 TypstObjectJson)
+from pdf_generation.models.request_model import RequestContentType, TypstObjectJson
 from pdf_generation.typeset.models.base_class import TypstObject
 from pdf_generation.typeset.models.heading import Heading
+from pdf_generation.typeset.models.list import BulletList, ListItem, OrderedList
 from pdf_generation.typeset.models.paragraph import Paragraph
 from pdf_generation.typeset.models.table import Table
+from pdf_generation.typeset.models.text import Text
 
 parser_dict: dict[RequestContentType, Type[TypstObject]] = {
     "heading": Heading,
-    "text": Paragraph,
+    "text": Text,
     "table": Table,
+    "paragraph": Paragraph,
+    "bulletList": BulletList,
+    "listItem": ListItem,
+    "orderedList": OrderedList,
 }
 
 
@@ -31,14 +36,18 @@ def parse_2darray(
 def parse_json(json_object: TypstObjectJson) -> TypstObject:
     parsed_object_type = parser_dict.get(json_object.type)
     content = json_object.content
-    parsed_content: str | TypstObject | list[list[str | TypstObject]] | None = None
+    parsed_content: (
+        str | TypstObject | list[TypstObject] | list[list[str | TypstObject]] | None
+    ) = None
 
     if isinstance(content, str):
         parsed_content = content
     elif isinstance(content, TypstObjectJson):
         parsed_content = parse_json(content)
     elif isinstance(content, list):
-        parsed_content = parse_2darray(content)
+        parsed_content = parse_json_array(content)
+    # elif isinstance(content[0], list):
+    #     parsed_content = parse_2darray(content)
     else:
         parsed_content = None
 
@@ -50,8 +59,10 @@ def parse_json(json_object: TypstObjectJson) -> TypstObject:
     if parsed_object_type is None:
         raise ValueError(f"Invalid type {json_object.type}")
         # return Paragraph(content="")  # return equivalent of None
-
-    parsed_object = parsed_object_type(content=parsed_content, **json_to_dict)  # type: ignore
+    if parsed_content is None:
+        parsed_object = parsed_object_type(**json_to_dict)
+    else:
+        parsed_object = parsed_object_type(content=parsed_content, **json_to_dict)  # type: ignore
 
     if parsed_object is None:
         raise ValueError(f"Invalid type {json_object.type}")

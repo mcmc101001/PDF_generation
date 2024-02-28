@@ -8,8 +8,11 @@ from pdf_generation.typeset.models.base_class import TypstObject
 
 @dataclass(frozen=True, kw_only=True)
 class Paragraph(TypstObject):
-    content: str | TypstObject = Field()
+    content: list[TypstObject] = Field()
 
     @override
     def render_internal_block(self) -> str:
-        return f"#par()[{self.content.render_block() if isinstance(self.content, TypstObject) else self.content}]"
+        rendered_content = ""
+        for ele in self.content:
+            rendered_content += f"{ele.render_block()} "
+        return f"#par({rendered_content})"

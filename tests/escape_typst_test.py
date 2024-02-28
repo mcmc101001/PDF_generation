@@ -1,13 +1,10 @@
-from pdf_generation.typeset.utils import (
-    escape_typst_code,
-    escape_typst_code_regex,
-    escape_typst_code_iter,
-)
-
 from random import choice
 from string import ascii_letters, digits, punctuation
-
 from time import time
+
+from pdf_generation.typeset.utils import (escape_typst_code,
+                                          escape_typst_code_iter,
+                                          escape_typst_code_regex)
 
 STRING_LENGTH = 10000000
 

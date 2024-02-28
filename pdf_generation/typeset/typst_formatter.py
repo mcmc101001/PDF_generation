@@ -1,10 +1,9 @@
 from __future__ import annotations
 
+from pathlib import Path
 from tempfile import NamedTemporaryFile, TemporaryDirectory
 
 import typst
-
-from pathlib import Path
 
 from pdf_generation.typeset.models.base_class import TypstObject
 from pdf_generation.typeset.models.image import ImageFactory

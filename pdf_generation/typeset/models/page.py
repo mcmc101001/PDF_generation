@@ -5,14 +5,13 @@ from pydantic import Field
 from pydantic.dataclasses import dataclass
 
 from pdf_generation.typeset.models.base_class import TypstObject
-from pdf_generation.typeset.utils import escape_typst_code
 
 # MUST BE FRONT OF DOCUMENT, POTENTIAL FIX TO THIS WOULD BE TO INHERIT FROM SOME SUBCLASS THTA WILL BE ORDERED
 
 
 @dataclass(frozen=True, kw_only=True)
 class Page(TypstObject):
-    header: str | TypstObject = Field()
+    header: TypstObject = Field()
 
     @override
     def render_internal_block(self) -> str:
@@ -21,8 +20,7 @@ class Page(TypstObject):
             f"""\
             #set page(
                 header: [
-                    {self.header.render_block() if isinstance(
-                self.header, TypstObject) else f"{escape_typst_code(self.header)}"}
+                    {self.header.render_block()}
                 ],
             )"""
         )

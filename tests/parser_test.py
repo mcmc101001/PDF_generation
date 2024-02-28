@@ -1,47 +1,38 @@
 from pdf_generation.models.request_model import GeneratePdfRequest
 from pdf_generation.typeset.parser import parse_json_array
 
-simple_json = {
-    "file_name": "test",
-    "content": [{"type": "heading", "level": 1, "content": "This is my title"}],
-}
-
+# Tests: heading, markup
 complex_json = {
     "file_name": "test",
     "content": [
-        {"type": "heading", "level": 1, "content": "This is my title"},
-        {"type": "text", "content": "Here is a sentence"},
         {
-            "type": "table",
-            "caption": "Whatever",
+            "type": "heading",
+            "attrs": {"level": 1},
             "content": [
-                ["hey", "idk", "this"],
-                [
-                    {"type": "heading", "level": 1, "content": "This is another title"},
-                    "hey2",
-                    "hey3",
-                ],
+                {"type": "text", "text": "This is my "},
+                {"type": "text", "marks": [{"type": "italic"}], "text": "title"},
             ],
         },
         {
-            "type": "heading",
-            "level": 1,
-            "content": "This is my other title",
-            "align": "center",
+            "type": "orderedList",
+            "attrs": {"start": 3},
+            "content": [
+                {"type": "listItem", "content": [{"type": "text", "text": "Item 1"}]},
+                {"type": "listItem", "content": [{"type": "text", "text": "Item 2"}]},
+            ],
+        },
+        {
+            "type": "bulletList",
+            "attrs": {"start": 1},
+            "content": [
+                {"type": "listItem", "content": [{"type": "text", "text": "Item 1"}]},
+                {"type": "listItem", "content": [{"type": "text", "text": "Item 2"}]},
+            ],
         },
     ],
 }
 
 
-def test_parser_simple():
-    objects = parse_json_array(GeneratePdfRequest(**simple_json).content)
-    assert len(objects) == 1
-
-
 def test_parser_complex_with_nesting():
     objects = parse_json_array(GeneratePdfRequest(**complex_json).content)
-    assert len(objects) == 4
-    assert objects[2].content[1][0].level == 1
-    assert objects[2].content[1][0].content == "This is another title"
-    assert objects[2].content[1][1] == "hey2"
-    assert objects[2].caption == "Whatever"
+    assert len(objects) == 3

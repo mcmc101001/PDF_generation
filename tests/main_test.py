@@ -67,7 +67,7 @@ def test_pdf_exact_output():
     )
     assert response.status_code == 200
     assert response.headers.get("Content-Type") == "application/pdf"
-    ref_pdf_path = Path.cwd() / "pdfs" / "reference.pdf"
+    ref_pdf_path = Path.cwd() / "tests" / "pdfs" / "reference.pdf"
     with open(ref_pdf_path, "rb") as f:
         expected_pdf = f.read()
     assert response.content == expected_pdf

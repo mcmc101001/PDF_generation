@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 from shutil import copy2
-from tempfile import NamedTemporaryFile, TemporaryDirectory
+from tempfile import NamedTemporaryFile
 from textwrap import dedent
 from typing import IO
 

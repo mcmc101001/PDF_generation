@@ -2,6 +2,7 @@ from pathlib import Path
 from urllib.parse import quote
 
 from fastapi import FastAPI, Response
+from fastapi.middleware.cors import CORSMiddleware
 
 from pdf_generation.models.request_model import GeneratePdfRequest
 from pdf_generation.typeset.models.heading import Heading
@@ -14,6 +15,19 @@ from pdf_generation.typeset.models.text import Text
 cwd = Path.cwd()
 
 app = FastAPI()
+
+origins = [
+    "http://localhost:5173",
+    "http://localhost:4173",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/")

@@ -1,9 +1,8 @@
-from pydantic.dataclasses import dataclass
-from pydantic.fields import Field
-
+from textwrap import dedent
 from typing import override
 
-from textwrap import dedent
+from pydantic.dataclasses import dataclass
+from pydantic.fields import Field
 
 from pdf_generation.typeset.models.base_class import TypstObject
 

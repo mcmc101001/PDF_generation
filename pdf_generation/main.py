@@ -8,9 +8,9 @@ from pdf_generation.models.request_model import GeneratePdfRequest
 from pdf_generation.typeset.models.heading import Heading
 from pdf_generation.typeset.models.metadata import Metadata
 from pdf_generation.typeset.models.page import Page
+from pdf_generation.typeset.models.text import Text
 from pdf_generation.typeset.parser import parse_json_array
 from pdf_generation.typeset.typst_formatter import TypstFormatter
-from pdf_generation.typeset.models.text import Text
 
 cwd = Path.cwd()
 

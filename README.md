@@ -5,30 +5,29 @@
 - [x] python dependencies: poetry
 - [x] use dataclasses
 - [x] Clean code: isort + black
-- [X] .dockerignore might me missing some stuff
+- [x] .dockerignore might me missing some stuff
 - [ ] for env managment: environs
-- [X] Check tempfile (from the std)
-- [X] check pathlib
-- [X] How to escape typst code
-- [X] Check the performance (replace / regex)
-- [X] Snake case methods
-- [X] Makefile to start the project / build the docker image, etc.
-- [X] Commit / push your code
-- [ ] Try to have a very simple webapp + text editor
-- [X] No relative imports
-- [X] Add tests (test your endpoint): pytest + fastapi documentation
-- [X] Remove classes in tests
-- [X] Run tests from Makefile with Docker
-- [X] Run mypy / black --check / isort with make
-- [X] Add flake8
-- [X] Check docker volumes
-- [X] Move your models to pdf_generation.models.py
+- [x] Check tempfile (from the std)
+- [x] check pathlib
+- [x] How to escape typst code
+- [x] Check the performance (replace / regex)
+- [x] Snake case methods
+- [x] Makefile to start the project / build the docker image, etc.
+- [x] Commit / push your code
+- [x] Try to have a very simple webapp + text editor
+- [x] No relative imports
+- [x] Add tests (test your endpoint): pytest + fastapi documentation
+- [x] Remove classes in tests
+- [x] Run tests from Makefile with Docker
+- [x] Run mypy / black --check / isort with make
+- [x] Add flake8
+- [x] Check docker volumes
+- [x] Move your models to pdf_generation.models.py
 - [ ] ImageFactory Refactor as a Context Manager
-- [X] all paths should be pathlib.Path
-- [X] Reorganize your files to put typst equivalent models in a single package
-- [X] Create temporary directory for compiling the PDF
-- [X] Make it a real API
-
+- [x] all paths should be pathlib.Path
+- [x] Reorganize your files to put typst equivalent models in a single package
+- [x] Create temporary directory for compiling the PDF
+- [x] Make it a real API
 
 ## Sample JSON input
 

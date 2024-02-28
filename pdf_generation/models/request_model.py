@@ -7,8 +7,8 @@ from pydantic.dataclasses import dataclass
 
 from pdf_generation.typeset.models.base_class import AlignmentType
 from pdf_generation.typeset.models.heading import HeadingAttrs
-from pdf_generation.typeset.models.text import Mark
 from pdf_generation.typeset.models.list import OrderedListAttrs
+from pdf_generation.typeset.models.text import Mark
 
 type RequestContentType = Literal["heading", "text", "table", "paragraph", "bulletList", "listItem", "orderedList"]  # type: ignore
 type Attributes = HeadingAttrs | OrderedListAttrs | None  # type: ignore

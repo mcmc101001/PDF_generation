@@ -4,8 +4,7 @@ from typing import override
 from pydantic import Field
 from pydantic.dataclasses import dataclass
 
-from pdf_generation.typeset.models.base_class import (AlignableTypstObject,
-                                                      TypstObject)
+from pdf_generation.typeset.models.base_class import AlignableTypstObject, TypstObject
 from pdf_generation.typeset.utils import escape_typst_code
 
 

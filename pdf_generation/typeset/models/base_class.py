@@ -9,7 +9,6 @@ type ObjectType = Literal[  # type: ignore
     "heading",
     "image",
     "text",
-    "table",
     "paragraph",
     "bulletList",
     "listItem",
@@ -37,16 +36,23 @@ type AlignmentType = Literal[  # type: ignore
 
 
 @dataclass(frozen=True, kw_only=True)
+class AlignableTypstObjectAttrs:
+    textAlign: AlignmentType | None = Field(default=None)
+
+
+@dataclass(frozen=True, kw_only=True)
 class AlignableTypstObject(BaseTypstObject):
-    align: AlignmentType | None = Field(default=None)
+    attrs: AlignableTypstObjectAttrs = Field(
+        default=AlignableTypstObjectAttrs(textAlign=None)
+    )
 
     @override
     def render_block(self) -> str:
-        if self.align is None:
+        if self.attrs.textAlign is None:
             return self.render_internal_block()
         return dedent(
             f"""
-            #align({self.align})[
+            #align({self.attrs.textAlign})[
                 {self.render_internal_block()}
             ]"""
         )

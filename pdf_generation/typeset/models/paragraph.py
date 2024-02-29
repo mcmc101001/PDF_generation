@@ -3,15 +3,14 @@ from typing import TYPE_CHECKING, override
 from pydantic import Field, field_validator
 from pydantic.dataclasses import dataclass
 
-from pdf_generation.typeset.models.base_class import (BaseTypstObject,
-                                                      ObjectType)
+from pdf_generation.typeset.models.base_class import AlignableTypstObject, ObjectType
 
 if TYPE_CHECKING:
     from pdf_generation.models.typst_object import TypstObject
 
 
 @dataclass(frozen=True, kw_only=True)
-class Paragraph(BaseTypstObject):
+class Paragraph(AlignableTypstObject):
     content: tuple["TypstObject", ...] = Field()
 
     @field_validator("type")

@@ -9,9 +9,11 @@ from typing import IO, override
 from pydantic import Field
 from pydantic.dataclasses import dataclass
 
-from pdf_generation.typeset.models.base_class import (AlignableTypstObject,
-                                                      AlignmentType,
-                                                      ObjectType)
+from pdf_generation.typeset.models.base_class import (
+    BaseTypstObject,
+    AlignmentType,
+    ObjectType,
+)
 from pdf_generation.typeset.utils import escape_typst_code
 
 """
@@ -46,7 +48,6 @@ class ImageFactory:
             width_percentage=width_percentage,
             height_percentage=height_percentage,
             caption=caption,
-            align=align,
         )
 
     def remove_temp_image_files(self):
@@ -55,7 +56,7 @@ class ImageFactory:
 
 
 @dataclass(frozen=True, kw_only=True)
-class Image(AlignableTypstObject):
+class Image(BaseTypstObject):
     type: ObjectType = "image"
     image_url: Path = Field()
     width_percentage: float | None = Field(default=None)

@@ -4,13 +4,14 @@ from typing import override
 from pydantic import Field
 from pydantic.dataclasses import dataclass
 
-from pdf_generation.typeset.models.base_class import AlignableTypstObject, TypstObject
+from pdf_generation.typeset.models.base_class import (AlignableTypstObject,
+                                                      BaseTypstObject)
 from pdf_generation.typeset.utils import escape_typst_code
 
 
 @dataclass(frozen=True, kw_only=True)
 class Table(AlignableTypstObject):
-    content: list[list[str | TypstObject]] = Field()
+    content: list[list[str | BaseTypstObject]] = Field()
     caption: str | None = Field(default=None)
 
     @override
@@ -19,7 +20,7 @@ class Table(AlignableTypstObject):
 
         for row in self.content:
             for ele in row:
-                content += f"[{ele.render_block() if isinstance(ele, TypstObject) else escape_typst_code(ele)}], "
+                content += f"[{ele.render_block() if isinstance(ele, BaseTypstObject) else escape_typst_code(ele)}], "
             content += "\n"
 
         block = dedent(

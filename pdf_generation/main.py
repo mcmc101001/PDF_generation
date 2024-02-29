@@ -1,7 +1,7 @@
 from pathlib import Path
 from urllib.parse import quote
 
-from fastapi import FastAPI, Response
+from fastapi import Depends, FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
 
 from pdf_generation.models.request_model import GeneratePdfRequest
@@ -9,10 +9,7 @@ from pdf_generation.typeset.models.heading import Heading
 from pdf_generation.typeset.models.metadata import Metadata
 from pdf_generation.typeset.models.page import Page
 from pdf_generation.typeset.models.text import Text
-from pdf_generation.typeset.parser import parse_json_array
 from pdf_generation.typeset.typst_formatter import TypstFormatter
-
-cwd = Path.cwd()
 
 app = FastAPI()
 
@@ -41,7 +38,7 @@ def generate(request: GeneratePdfRequest):
     document = TypstFormatter()
     document.add_object(Metadata(title=request.file_name))
 
-    p = Path(cwd) / "pdf_generation" / "images" / "logo-512x512.png"
+    p = Path(__file__).parent / "images" / "logo-512x512.png"
 
     logo = document.image_factory.generate(
         image_url=p, height_percentage=80, align="left"
@@ -49,11 +46,12 @@ def generate(request: GeneratePdfRequest):
 
     document.add_object(Page(header=logo))
 
-    objects = parse_json_array(request.content)
-    if len(objects) == 0:
-        document.add_object(Heading(content=[Text(text="No content provided")]))
-    for object in objects:
+    if len(request.content) == 0:
+        document.add_object(Text(type="text", text="No content provided"))
+    for object in request.content:
         document.add_object(object)
+
+    print(request.content)
 
     pdf_bytes = document.generate_pdf()
 

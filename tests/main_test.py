@@ -10,7 +10,32 @@ client = TestClient(app)
 
 sample_json = {
     "file_name": "test",
-    "content": [],
+    "content": [
+        {
+            "type": "heading",
+            "attrs": {"level": 1},
+            "content": [
+                {"type": "text", "text": "This is my "},
+                {"type": "text", "marks": [{"type": "italic"}], "text": "title"},
+            ],
+        },
+        {
+            "type": "orderedList",
+            "attrs": {"start": 3},
+            "content": [
+                {"type": "listItem", "content": [{"type": "text", "text": "Item 1"}]},
+                {"type": "listItem", "content": [{"type": "text", "text": "Item 2"}]},
+            ],
+        },
+        {
+            "type": "bulletList",
+            "attrs": {"start": 1},
+            "content": [
+                {"type": "listItem", "content": [{"type": "text", "text": "Item 1"}]},
+                {"type": "listItem", "content": [{"type": "text", "text": "Item 2"}]},
+            ],
+        },
+    ],
 }
 
 
@@ -60,10 +85,7 @@ def test_pdf_name_escape_characters():
 def test_pdf_exact_output():
     response = client.post(
         "/generate",
-        json={
-            "file_name": "custom_name",
-            "content": [],
-        },
+        json=sample_json,
     )
     assert response.status_code == 200
     assert response.headers.get("Content-Type") == "application/pdf"

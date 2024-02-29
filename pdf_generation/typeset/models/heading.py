@@ -1,10 +1,16 @@
-from textwrap import dedent
-from typing import override
+from __future__ import annotations
 
-from pydantic import Field
+from textwrap import dedent
+from typing import TYPE_CHECKING, override
+
+from pydantic import Field, field_validator
 from pydantic.dataclasses import dataclass
 
-from pdf_generation.typeset.models.base_class import AlignableTypstObject, TypstObject
+from pdf_generation.typeset.models.base_class import (AlignableTypstObject,
+                                                      ObjectType)
+
+if TYPE_CHECKING:
+    from pdf_generation.models.typst_object import TypstObject
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -14,8 +20,14 @@ class HeadingAttrs:
 
 @dataclass(frozen=True, kw_only=True)
 class Heading(AlignableTypstObject):
-    content: list[TypstObject] = Field()
-    attrs: HeadingAttrs = Field(default=HeadingAttrs(level=5))
+    content: tuple["TypstObject", ...] = Field()
+    attrs: HeadingAttrs = Field(default=HeadingAttrs(level=1))
+
+    @field_validator("type")
+    @classmethod
+    def validate_type(cls, v: ObjectType):
+        if v != "heading":
+            raise ValueError(f"Expected type to be heading, got {v} instead.")
 
     @override
     def render_internal_block(self) -> str:

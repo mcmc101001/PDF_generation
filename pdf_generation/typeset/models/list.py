@@ -1,15 +1,24 @@
 from textwrap import dedent
-from typing import override
+from typing import TYPE_CHECKING, override
 
+from pydantic import Field, field_validator
 from pydantic.dataclasses import dataclass
-from pydantic.fields import Field
 
-from pdf_generation.typeset.models.base_class import TypstObject
+from pdf_generation.typeset.models.base_class import BaseTypstObject, ObjectType
+
+if TYPE_CHECKING:
+    from pdf_generation.models.typst_object import TypstObject
 
 
 @dataclass(frozen=True, kw_only=True)
-class ListItem(TypstObject):
-    content: list[TypstObject] = Field()
+class ListItem(BaseTypstObject):
+    content: tuple["TypstObject", ...] = Field()
+
+    @field_validator("type")
+    @classmethod
+    def validate_type(cls, v: ObjectType):
+        if v != "listItem":
+            raise ValueError(f"Expected type to be listItem, got {v} instead.")
 
     @override
     def render_internal_block(self) -> str:
@@ -19,15 +28,21 @@ class ListItem(TypstObject):
         return rendered_content
 
 
-@dataclass
+@dataclass(frozen=True, kw_only=True)
 class OrderedListAttrs:
     start: int = Field(default=1)
 
 
 @dataclass(frozen=True, kw_only=True)
-class OrderedList(TypstObject):
+class OrderedList(BaseTypstObject):
     attrs: OrderedListAttrs = Field(default=OrderedListAttrs())
-    content: list[ListItem] = Field()
+    content: tuple[ListItem, ...] = Field()
+
+    @field_validator("type")
+    @classmethod
+    def validate_type(cls, v: ObjectType):
+        if v != "orderedList":
+            raise ValueError(f"Expected type to be orderedList, got {v} instead.")
 
     @override
     def render_internal_block(self) -> str:
@@ -45,8 +60,14 @@ class OrderedList(TypstObject):
 
 
 @dataclass(frozen=True, kw_only=True)
-class BulletList(TypstObject):
-    content: list[ListItem] = Field()
+class BulletList(BaseTypstObject):
+    content: tuple[ListItem, ...] = Field()
+
+    @field_validator("type")
+    @classmethod
+    def validate_type(cls, v: ObjectType):
+        if v != "bulletList":
+            raise ValueError(f"Expected type to be bulletList, got {v} instead.")
 
     @override
     def render_internal_block(self) -> str:

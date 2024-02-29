@@ -1,14 +1,24 @@
-from typing import override
+from typing import TYPE_CHECKING, override
 
-from pydantic import Field
+from pydantic import Field, field_validator
 from pydantic.dataclasses import dataclass
 
-from pdf_generation.typeset.models.base_class import TypstObject
+from pdf_generation.typeset.models.base_class import (BaseTypstObject,
+                                                      ObjectType)
+
+if TYPE_CHECKING:
+    from pdf_generation.models.typst_object import TypstObject
 
 
 @dataclass(frozen=True, kw_only=True)
-class Paragraph(TypstObject):
-    content: list[TypstObject] = Field()
+class Paragraph(BaseTypstObject):
+    content: tuple["TypstObject", ...] = Field()
+
+    @field_validator("type")
+    @classmethod
+    def validate_type(cls, v: ObjectType):
+        if v != "paragraph":
+            raise ValueError(f"Expected type to be paragraph, got {v} instead.")
 
     @override
     def render_internal_block(self) -> str:

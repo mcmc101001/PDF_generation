@@ -5,19 +5,19 @@ from tempfile import NamedTemporaryFile, TemporaryDirectory
 
 import typst
 
-from pdf_generation.typeset.models.base_class import TypstObject
+from pdf_generation.typeset.models.base_class import BaseTypstObject
 from pdf_generation.typeset.models.image import ImageFactory
 
 
 class TypstFormatter:
-    def __init__(self, objects: list[TypstObject] | None = None):
+    def __init__(self, objects: list[BaseTypstObject] | None = None):
         if objects is None:
             objects = []
         self.objects = objects
         self.temp_dir = TemporaryDirectory()
         self.image_factory = ImageFactory(Path(self.temp_dir.name))
 
-    def add_object(self, obj: TypstObject):
+    def add_object(self, obj: BaseTypstObject):
         self.objects.append(obj)
 
     def remove_temp_image_files(self):

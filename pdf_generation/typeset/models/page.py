@@ -4,14 +4,14 @@ from typing import override
 from pydantic import Field
 from pydantic.dataclasses import dataclass
 
-from pdf_generation.typeset.models.base_class import TypstObject
-
-# MUST BE FRONT OF DOCUMENT, POTENTIAL FIX TO THIS WOULD BE TO INHERIT FROM SOME SUBCLASS THTA WILL BE ORDERED
+from pdf_generation.typeset.models.base_class import (BaseTypstObject,
+                                                      ObjectType)
 
 
 @dataclass(frozen=True, kw_only=True)
-class Page(TypstObject):
-    header: TypstObject = Field()
+class Page(BaseTypstObject):
+    type: ObjectType = "page"
+    header: BaseTypstObject = Field()
 
     @override
     def render_internal_block(self) -> str:

@@ -5,13 +5,27 @@ from typing import Literal, override
 from pydantic import Field
 from pydantic.dataclasses import dataclass
 
+type ObjectType = Literal[  # type: ignore
+    "heading",
+    "image",
+    "text",
+    "table",
+    "paragraph",
+    "bulletList",
+    "listItem",
+    "orderedList",
+    "metadata",
+    "page",
+]
+
 
 @dataclass(frozen=True)
-class TypstObject(ABC):
+class BaseTypstObject(ABC):
+    type: ObjectType = Field(title="Type of the field")
 
     @abstractmethod
     def render_internal_block(self) -> str:
-        raise NotImplementedError
+        return ""
 
     def render_block(self) -> str:
         return self.render_internal_block()
@@ -23,7 +37,7 @@ type AlignmentType = Literal[  # type: ignore
 
 
 @dataclass(frozen=True, kw_only=True)
-class AlignableTypstObject(TypstObject):
+class AlignableTypstObject(BaseTypstObject):
     align: AlignmentType | None = Field(default=None)
 
     @override

@@ -28,40 +28,8 @@
 - [x] Reorganize your files to put typst equivalent models in a single package
 - [x] Create temporary directory for compiling the PDF
 - [x] Make it a real API
-
-## Sample JSON input
-
-```json
-    [
-        {
-            "type": "heading",
-            "level": 1,
-            "content": "This is my title"
-        },
-        {
-            "type": "newline"
-        },
-        {
-            "type": "text",
-            "content": "Here is a sentence"
-        },
-        {
-            "type": "table",
-            "caption": "Whatever",
-            "..."
-        },
-        {
-            "type": "electoral-results-table",
-        },
-        {
-            "type": "aligned-block",
-            "alignement": "center",
-            "content": [
-                {
-                    "type": "heading",
-                    ...
-                }
-            ]
-        }
-    ]
-```
+- [X] Rework the dataclasses so that you don't have to do custom parsing
+- [X] Use frozen & tuples as much as possible
+- [ ] Check fastapi depends with context manager to get a clean working directory
+- [ ] Image Factory with symlicks
+- [ ] Generate qgis PNG maps with python script

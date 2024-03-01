@@ -3,8 +3,7 @@ from typing import Literal, override
 from pydantic import Field, field_validator
 from pydantic.dataclasses import dataclass
 
-from pdf_generation.typeset.models.base_class import (BaseTypstObject,
-                                                      ObjectType)
+from pdf_generation.typeset.models.base_class import BaseTypstObject, ObjectType
 from pdf_generation.typeset.utils import escape_typst_code
 
 type MarkType = Literal["bold", "italic", "strike"]  # type: ignore

@@ -18,7 +18,7 @@ type ObjectType = Literal[  # type: ignore
 ]
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, kw_only=True)
 class BaseTypstObject(ABC):
     type: ObjectType = Field(title="Type of the field")
 

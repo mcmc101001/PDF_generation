@@ -1,11 +1,12 @@
 from pathlib import Path
+from tempfile import TemporaryDirectory
+from typing import Annotated
 from urllib.parse import quote
 
 from fastapi import Depends, FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
 
 from pdf_generation.models.request_model import GeneratePdfRequest
-from pdf_generation.typeset.models.heading import Heading
 from pdf_generation.typeset.models.metadata import Metadata
 from pdf_generation.typeset.models.page import Page
 from pdf_generation.typeset.models.text import Text
@@ -27,22 +28,25 @@ app.add_middleware(
 )
 
 
+def get_new_temporary_directory():
+    return TemporaryDirectory()
+
+
 @app.get("/")
 def read_root():
     return {"message": "Hello World"}
 
 
 @app.post("/generate", tags=["typst"])
-def generate(request: GeneratePdfRequest):
-
-    document = TypstFormatter()
+def generate(
+    request: GeneratePdfRequest,
+    temp_dir: Annotated[TemporaryDirectory, Depends(get_new_temporary_directory)],
+):
+    image_dir_path = Path(__file__).parent / "images"
+    document = TypstFormatter(temp_dir=temp_dir, image_dir_path=image_dir_path)
     document.add_object(Metadata(title=request.file_name))
 
-    p = Path(__file__).parent / "images" / "logo-512x512.png"
-
-    logo = document.image_factory.generate(
-        image_url=p, height_percentage=80, align="left"
-    )
+    logo = document.image_factory.generate(id="logo", height_percentage=80)
 
     document.add_object(Page(header=logo))
 
@@ -50,8 +54,6 @@ def generate(request: GeneratePdfRequest):
         document.add_object(Text(type="text", text="No content provided"))
     for object in request.content:
         document.add_object(object)
-
-    print(request.content)
 
     pdf_bytes = document.generate_pdf()
 

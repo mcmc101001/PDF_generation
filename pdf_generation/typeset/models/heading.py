@@ -8,8 +8,8 @@ from pydantic.dataclasses import dataclass
 
 from pdf_generation.typeset.models.base_class import (
     AlignableTypstObject,
-    ObjectType,
     AlignableTypstObjectAttrs,
+    ObjectType,
 )
 
 if TYPE_CHECKING:
@@ -23,6 +23,7 @@ class HeadingAttrs(AlignableTypstObjectAttrs):
 
 @dataclass(frozen=True, kw_only=True)
 class Heading(AlignableTypstObject):
+    type: ObjectType = "heading"
     content: tuple["TypstObject", ...] = Field()
     attrs: HeadingAttrs = Field(default=HeadingAttrs(level=1, textAlign=None))
 

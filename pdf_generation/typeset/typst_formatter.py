@@ -10,12 +10,20 @@ from pdf_generation.typeset.models.image import ImageFactory
 
 
 class TypstFormatter:
-    def __init__(self, objects: list[BaseTypstObject] | None = None):
+
+    def __init__(
+        self,
+        temp_dir: TemporaryDirectory,
+        image_dir_path: Path,
+        objects: list[BaseTypstObject] | None = None,
+    ):
         if objects is None:
             objects = []
         self.objects = objects
-        self.temp_dir = TemporaryDirectory()
-        self.image_factory = ImageFactory(Path(self.temp_dir.name))
+        self.temp_dir = temp_dir
+        self.image_factory = ImageFactory(
+            temp_dir_path=Path(self.temp_dir.name), image_dir_path=image_dir_path
+        )
 
     def add_object(self, obj: BaseTypstObject):
         self.objects.append(obj)

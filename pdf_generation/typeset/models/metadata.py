@@ -3,8 +3,7 @@ from typing import override
 from pydantic import Field
 from pydantic.dataclasses import dataclass
 
-from pdf_generation.typeset.models.base_class import (BaseTypstObject,
-                                                      ObjectType)
+from pdf_generation.typeset.models.base_class import BaseTypstObject, ObjectType
 from pdf_generation.typeset.utils import escape_typst_code
 
 # MUST BE FRONT OF DOCUMENT, POTENTIAL FIX TO THIS WOULD BE TO INHERIT FROM SOME SUBCLASS THTA WILL BE ORDERED

@@ -4,7 +4,12 @@ from typing import TYPE_CHECKING, override
 from pydantic import Field, field_validator
 from pydantic.dataclasses import dataclass
 
-from pdf_generation.typeset.models.base_class import BaseTypstObject, ObjectType
+from pdf_generation.typeset.models.base_class import (
+    AlignableTypstObject,
+    AlignableTypstObjectAttrs,
+    BaseTypstObject,
+    ObjectType,
+)
 
 if TYPE_CHECKING:
     from pdf_generation.models.typst_object import TypstObject
@@ -29,12 +34,12 @@ class ListItem(BaseTypstObject):
 
 
 @dataclass(frozen=True, kw_only=True)
-class OrderedListAttrs:
+class OrderedListAttrs(AlignableTypstObjectAttrs):
     start: int = Field(default=1)
 
 
 @dataclass(frozen=True, kw_only=True)
-class OrderedList(BaseTypstObject):
+class OrderedList(AlignableTypstObject):
     attrs: OrderedListAttrs = Field(default=OrderedListAttrs())
     content: tuple[ListItem, ...] = Field()
 
@@ -60,7 +65,7 @@ class OrderedList(BaseTypstObject):
 
 
 @dataclass(frozen=True, kw_only=True)
-class BulletList(BaseTypstObject):
+class BulletList(AlignableTypstObject):
     content: tuple[ListItem, ...] = Field()
 
     @field_validator("type")

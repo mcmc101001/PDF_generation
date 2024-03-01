@@ -30,6 +30,7 @@
 - [x] Make it a real API
 - [X] Rework the dataclasses so that you don't have to do custom parsing
 - [X] Use frozen & tuples as much as possible
-- [ ] Check fastapi depends with context manager to get a clean working directory
-- [ ] Image Factory with symlicks
+- [X] Use docker engine over docker desktop to fix weird bug
+- [X] Check fastapi depends with context manager to get a clean working directory
+- [ ] Image Factory with symlicks -> Don't think this works as typst compiler requires the images to be in the same directory
 - [ ] Generate qgis PNG maps with python script

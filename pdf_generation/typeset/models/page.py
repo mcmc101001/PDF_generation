@@ -4,8 +4,7 @@ from typing import override
 from pydantic import Field
 from pydantic.dataclasses import dataclass
 
-from pdf_generation.typeset.models.base_class import (BaseTypstObject,
-                                                      ObjectType)
+from pdf_generation.typeset.models.base_class import BaseTypstObject, ObjectType
 
 
 @dataclass(frozen=True, kw_only=True)

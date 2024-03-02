@@ -19,18 +19,16 @@ typst images do not support internet or absolute paths.
 @dataclass(frozen=True, kw_only=True)
 class ImageAttrs:
     id: str = Field(default="1")
+    src: str | None = Field(default=None)
 
 
 @dataclass(frozen=True, kw_only=True)
 class Image(BaseTypstObject):
     type: ObjectType = "image"
-    attrs: ImageAttrs = Field(default_factory=ImageAttrs)
+    attrs: ImageAttrs = Field(default=ImageAttrs())
     width_percentage: float | None = Field(default=None)
     height_percentage: float | None = Field(default=None)
     caption: str | None = Field(default=None)
-
-    def generate_image_url(self, factory: ImageFactory) -> str:
-        return factory.generate_image_path(id=self.attrs.id).as_posix()
 
     @field_validator("type")
     @classmethod
@@ -38,6 +36,9 @@ class Image(BaseTypstObject):
         expected_type = "image"
         if v != expected_type:
             raise ValueError(f"Expected type to be {expected_type}, got {v} instead.")
+
+    def generate_image_url(self, factory: ImageFactory) -> str:
+        return factory.generate_image_path(id=self.attrs.id).as_posix()
 
     @override
     def render_internal_block(self, dependencies) -> str:

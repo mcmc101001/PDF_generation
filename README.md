@@ -34,3 +34,7 @@
 - [X] Check fastapi depends with context manager to get a clean working directory
 - [ ] Image Factory with symlicks -> Don't think this works as typst compiler requires the images to be in the same directory
 - [ ] Generate qgis PNG maps with python script
+
+## Questions
+- [ ] How to inject imageFactory as dependency? into constructor makes more sense but have to recursively inject, else need to pass it as a parameter to every render_block method
+- [ ] How does fastapi know what dataclass to use in request if typing is union of multiple dataclasses?

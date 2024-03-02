@@ -13,7 +13,7 @@ from pdf_generation.typeset.models.base_class import (
 )
 
 if TYPE_CHECKING:
-    from pdf_generation.models.typst_object import TypstObject
+    from pdf_generation.typeset.models.typst_object import TypstObject
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -34,10 +34,10 @@ class Heading(AlignableTypstObject):
             raise ValueError(f"Expected type to be heading, got {v} instead.")
 
     @override
-    def render_internal_block(self) -> str:
+    def render_internal_block(self, dependencies) -> str:
         rendered_content = ""
         for ele in self.content:
-            rendered_content += f"{ele.render_block()}"
+            rendered_content += f"{ele.render_block(dependencies)}"
         return dedent(
             f"""\
             #heading(

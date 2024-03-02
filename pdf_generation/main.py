@@ -7,6 +7,7 @@ from fastapi import Depends, FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
 
 from pdf_generation.models.request_model import GeneratePdfRequest
+from pdf_generation.typeset.models.image import Image, ImageAttrs
 from pdf_generation.typeset.models.metadata import Metadata
 from pdf_generation.typeset.models.page import Page
 from pdf_generation.typeset.models.text import Text
@@ -28,10 +29,6 @@ app.add_middleware(
 )
 
 
-def get_new_temporary_directory():
-    return TemporaryDirectory()
-
-
 @app.get("/")
 def read_root():
     return {"message": "Hello World"}
@@ -40,13 +37,13 @@ def read_root():
 @app.post("/generate", tags=["typst"])
 def generate(
     request: GeneratePdfRequest,
-    temp_dir: Annotated[TemporaryDirectory, Depends(get_new_temporary_directory)],
+    temp_dir: Annotated[TemporaryDirectory, Depends(TemporaryDirectory)],
 ):
     image_dir_path = Path(__file__).parent / "images"
     document = TypstFormatter(temp_dir=temp_dir, image_dir_path=image_dir_path)
     document.add_object(Metadata(title=request.file_name))
 
-    logo = document.image_factory.generate(id="logo", height_percentage=80)
+    logo = Image(attrs=ImageAttrs(id="logo"), height_percentage=80)
 
     document.add_object(Page(header=logo))
 

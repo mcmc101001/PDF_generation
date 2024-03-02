@@ -5,34 +5,36 @@ from tempfile import NamedTemporaryFile, TemporaryDirectory
 
 import typst
 
+from pdf_generation.typeset.dependencies.dependencies import Dependencies
+from pdf_generation.typeset.dependencies.image_factory import ImageFactory
 from pdf_generation.typeset.models.base_class import BaseTypstObject
-from pdf_generation.typeset.models.image import ImageFactory
 
 
 class TypstFormatter:
-
     def __init__(
         self,
         temp_dir: TemporaryDirectory,
         image_dir_path: Path,
-        objects: list[BaseTypstObject] | None = None,
+        content: list[BaseTypstObject] | None = None,
     ):
-        if objects is None:
-            objects = []
-        self.objects = objects
+        if content is None:
+            content = []
+        self.content = content
         self.temp_dir = temp_dir
-        self.image_factory = ImageFactory(
-            temp_dir_path=Path(self.temp_dir.name), image_dir_path=image_dir_path
+        self.dependencies = Dependencies(
+            image_factory=ImageFactory(
+                temp_dir_path=Path(self.temp_dir.name), image_dir_path=image_dir_path
+            )
         )
 
     def add_object(self, obj: BaseTypstObject):
-        self.objects.append(obj)
+        self.content.append(obj)
 
     def remove_temp_image_files(self):
-        self.image_factory.remove_temp_image_files()
+        self.dependencies.image_factory.remove_temp_image_files()
 
     def render_block(self) -> str:
-        return "\n".join([obj.render_block() for obj in self.objects])
+        return "\n".join([obj.render_block(self.dependencies) for obj in self.content])
 
     def generate_pdf(self) -> bytes:
         with NamedTemporaryFile(

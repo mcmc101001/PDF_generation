@@ -13,13 +13,12 @@ class Page(BaseTypstObject):
     header: BaseTypstObject = Field()
 
     @override
-    def render_internal_block(self) -> str:
-
+    def render_internal_block(self, dependencies) -> str:
         return dedent(
             f"""\
             #set page(
                 header: [
-                    {self.header.render_block()}
+                    {self.header.render_block(dependencies)}
                 ],
             )"""
         )

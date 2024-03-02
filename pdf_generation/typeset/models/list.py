@@ -12,11 +12,12 @@ from pdf_generation.typeset.models.base_class import (
 )
 
 if TYPE_CHECKING:
-    from pdf_generation.models.typst_object import TypstObject
+    from pdf_generation.typeset.models.typst_object import TypstObject
 
 
 @dataclass(frozen=True, kw_only=True)
 class ListItem(BaseTypstObject):
+    type: ObjectType = "listItem"
     content: tuple["TypstObject", ...] = Field()
 
     @field_validator("type")
@@ -26,10 +27,10 @@ class ListItem(BaseTypstObject):
             raise ValueError(f"Expected type to be listItem, got {v} instead.")
 
     @override
-    def render_internal_block(self) -> str:
+    def render_internal_block(self, dependencies) -> str:
         rendered_content = ""
         for ele in self.content:
-            rendered_content += f"{ele.render_block()} "
+            rendered_content += f"{ele.render_block(dependencies)} "
         return rendered_content
 
 
@@ -40,6 +41,7 @@ class OrderedListAttrs(AlignableTypstObjectAttrs):
 
 @dataclass(frozen=True, kw_only=True)
 class OrderedList(AlignableTypstObject):
+    type: ObjectType = "orderedList"
     attrs: OrderedListAttrs = Field(default=OrderedListAttrs())
     content: tuple[ListItem, ...] = Field()
 
@@ -50,10 +52,10 @@ class OrderedList(AlignableTypstObject):
             raise ValueError(f"Expected type to be orderedList, got {v} instead.")
 
     @override
-    def render_internal_block(self) -> str:
+    def render_internal_block(self, dependencies) -> str:
         rendered_content = ""
         for ele in self.content:
-            rendered_content += f"[{ele.render_block()}], "
+            rendered_content += f"[{ele.render_block(dependencies)}], "
         return dedent(
             f"""\
             #enum(
@@ -66,6 +68,7 @@ class OrderedList(AlignableTypstObject):
 
 @dataclass(frozen=True, kw_only=True)
 class BulletList(AlignableTypstObject):
+    type: ObjectType = "bulletList"
     content: tuple[ListItem, ...] = Field()
 
     @field_validator("type")
@@ -75,8 +78,8 @@ class BulletList(AlignableTypstObject):
             raise ValueError(f"Expected type to be bulletList, got {v} instead.")
 
     @override
-    def render_internal_block(self) -> str:
+    def render_internal_block(self, dependencies) -> str:
         rendered_content = ""
         for ele in self.content:
-            rendered_content += f"[{ele.render_block()}], "
+            rendered_content += f"[{ele.render_block(dependencies)}], "
         return f"#list({rendered_content})"

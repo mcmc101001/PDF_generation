@@ -26,6 +26,7 @@ class Mark:
 
 @dataclass(frozen=True, kw_only=True)
 class Text(BaseTypstObject):
+    type: ObjectType = "text"
     text: str = Field()
     marks: tuple[Mark] | None = Field(default=None)
 
@@ -36,7 +37,7 @@ class Text(BaseTypstObject):
             raise ValueError(f"Expected type to be text, got {v} instead.")
 
     @override
-    def render_internal_block(self) -> str:
+    def render_internal_block(self, dependencies) -> str:
         modified_text = escape_typst_code(self.text)
         if self.marks is not None:
             for mark in self.marks:

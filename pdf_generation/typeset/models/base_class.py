@@ -5,6 +5,8 @@ from typing import Literal, override
 from pydantic import Field
 from pydantic.dataclasses import dataclass
 
+from pdf_generation.typeset.dependencies.dependencies import Dependencies
+
 type ObjectType = Literal[  # type: ignore
     "heading",
     "image",
@@ -23,11 +25,11 @@ class BaseTypstObject(ABC):
     type: ObjectType = Field(title="Type of the field")
 
     @abstractmethod
-    def render_internal_block(self) -> str:
+    def render_internal_block(self, dependencies: Dependencies) -> str:
         return ""
 
-    def render_block(self) -> str:
-        return self.render_internal_block()
+    def render_block(self, dependencies: Dependencies) -> str:
+        return self.render_internal_block(dependencies)
 
 
 type AlignmentType = Literal[  # type: ignore
@@ -47,12 +49,12 @@ class AlignableTypstObject(BaseTypstObject):
     )
 
     @override
-    def render_block(self) -> str:
+    def render_block(self, dependencies: Dependencies) -> str:
         if self.attrs.textAlign is None:
-            return self.render_internal_block()
+            return self.render_internal_block(dependencies)
         return dedent(
             f"""
             #align({self.attrs.textAlign})[
-                {self.render_internal_block()}
+                {self.render_internal_block(dependencies)}
             ]"""
         )

@@ -15,5 +15,5 @@ class Metadata(BaseTypstObject):
     title: str = Field()
 
     @override
-    def render_internal_block(self) -> str:
+    def render_internal_block(self, dependencies) -> str:
         return f"#set document(title: [{escape_typst_code(self.title)}])"

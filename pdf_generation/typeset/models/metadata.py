@@ -18,7 +18,7 @@ class Metadata(BaseTypstObject):
     @classmethod
     def validate_type(cls, v: ObjectType):
         expected_type = "metadata"
-        if v != type:
+        if v != expected_type:
             raise ValueError(f"Expected type to be {expected_type}, got {v} instead.")
 
     @override

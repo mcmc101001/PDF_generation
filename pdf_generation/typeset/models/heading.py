@@ -31,7 +31,7 @@ class Heading(AlignableTypstObject):
     @classmethod
     def validate_type(cls, v: ObjectType):
         expected_type = "heading"
-        if v != type:
+        if v != expected_type:
             raise ValueError(f"Expected type to be {expected_type}, got {v} instead.")
 
     @override

@@ -3,7 +3,7 @@ from __future__ import annotations
 from textwrap import dedent
 from typing import override
 
-from pydantic import Field
+from pydantic import Field, field_validator
 from pydantic.dataclasses import dataclass
 
 from pdf_generation.typeset.dependencies.image_factory import ImageFactory
@@ -31,6 +31,13 @@ class Image(BaseTypstObject):
 
     def generate_image_url(self, factory: ImageFactory) -> str:
         return factory.generate_image_path(id=self.attrs.id).as_posix()
+
+    @field_validator("type")
+    @classmethod
+    def validate_type(cls, v: ObjectType):
+        expected_type = "image"
+        if v != type:
+            raise ValueError(f"Expected type to be {expected_type}, got {v} instead.")
 
     @override
     def render_internal_block(self, dependencies) -> str:

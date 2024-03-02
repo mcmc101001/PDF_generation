@@ -23,8 +23,9 @@ class ListItem(BaseTypstObject):
     @field_validator("type")
     @classmethod
     def validate_type(cls, v: ObjectType):
-        if v != "listItem":
-            raise ValueError(f"Expected type to be listItem, got {v} instead.")
+        expected_type = "listItem"
+        if v != type:
+            raise ValueError(f"Expected type to be {expected_type}, got {v} instead.")
 
     @override
     def render_internal_block(self, dependencies) -> str:
@@ -48,8 +49,9 @@ class OrderedList(AlignableTypstObject):
     @field_validator("type")
     @classmethod
     def validate_type(cls, v: ObjectType):
-        if v != "orderedList":
-            raise ValueError(f"Expected type to be orderedList, got {v} instead.")
+        expected_type = "orderedList"
+        if v != type:
+            raise ValueError(f"Expected type to be {expected_type}, got {v} instead.")
 
     @override
     def render_internal_block(self, dependencies) -> str:
@@ -74,8 +76,9 @@ class BulletList(AlignableTypstObject):
     @field_validator("type")
     @classmethod
     def validate_type(cls, v: ObjectType):
-        if v != "bulletList":
-            raise ValueError(f"Expected type to be bulletList, got {v} instead.")
+        expected_type = "bulletList"
+        if v != type:
+            raise ValueError(f"Expected type to be {expected_type}, got {v} instead.")
 
     @override
     def render_internal_block(self, dependencies) -> str:

@@ -30,8 +30,9 @@ class Heading(AlignableTypstObject):
     @field_validator("type")
     @classmethod
     def validate_type(cls, v: ObjectType):
-        if v != "heading":
-            raise ValueError(f"Expected type to be heading, got {v} instead.")
+        expected_type = "heading"
+        if v != type:
+            raise ValueError(f"Expected type to be {expected_type}, got {v} instead.")
 
     @override
     def render_internal_block(self, dependencies) -> str:

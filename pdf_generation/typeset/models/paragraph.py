@@ -17,8 +17,9 @@ class Paragraph(AlignableTypstObject):
     @field_validator("type")
     @classmethod
     def validate_type(cls, v: ObjectType):
-        if v != "paragraph":
-            raise ValueError(f"Expected type to be paragraph, got {v} instead.")
+        expected_type = "paragraph"
+        if v != type:
+            raise ValueError(f"Expected type to be {expected_type}, got {v} instead.")
 
     @override
     def render_internal_block(self, dependencies) -> str:

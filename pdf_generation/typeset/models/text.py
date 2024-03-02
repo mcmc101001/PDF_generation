@@ -33,8 +33,9 @@ class Text(BaseTypstObject):
     @field_validator("type")
     @classmethod
     def validate_type(cls, v: ObjectType):
-        if v != "text":
-            raise ValueError(f"Expected type to be text, got {v} instead.")
+        expected_type = "text"
+        if v != type:
+            raise ValueError(f"Expected type to be {expected_type}, got {v} instead.")
 
     @override
     def render_internal_block(self, dependencies) -> str:
